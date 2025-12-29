@@ -1,0 +1,8 @@
+streamlit
+pandas
+openpyxl
+pypdf
+langchain
+langchain-community
+langchain-ollama
+faiss-cpu

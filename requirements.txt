@@ -5,4 +5,4 @@ pypdf
 langchain
 langchain-community
 langchain-ollama
-faiss-cpu
+numpy

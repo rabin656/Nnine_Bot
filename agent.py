@@ -88,18 +88,9 @@ class LocalAIRagAgent:
         if os.path.exists(self.index_file):
             self.vector_store.load(self.index_file)
 
-    def ingest_data(self, pdf_path, excel_path):
-        """Loads data from PDF and Excel, chunks it, and rebuilds the index."""
+    def ingest_data(self, excel_path):
+        """Loads data from Excel, chunks it, and rebuilds the index."""
         docs = []
-        
-        # Load PDF
-        if os.path.exists(pdf_path):
-            print(f"Loading {pdf_path}...")
-            try:
-                loader = PyPDFLoader(pdf_path)
-                docs.extend(loader.load())
-            except Exception as e:
-                print(f"Error loading PDF: {e}")
         
         # Load Excel
         if os.path.exists(excel_path):
@@ -135,7 +126,12 @@ class LocalAIRagAgent:
         docs = self.vector_store.similarity_search(check_query, k=3)
         context = "\n\n".join([d.page_content for d in docs])
         
-        template = """Imagine yourself as a helpful assistant of Nnine Solutions who's job is to answer the user question based on the context provided. If you don't have an answer based on the context, just say "Sorry, I don't know about this", Your answer must be in human language, the user must feel like he is talking to a real person. Answer the question in a way that is easy to understand and provides value to the user. Answer according to the context provided:
+        template = """You are Nnine/N9/nnine/NNINE Solutions AI Assistant, a professional and helpful AI.I have provided you the excel file of Nnine, where all the information about Nnine is given. You must only answer 
+        using the information in the provided Excel file. Do not use outside knowledge or make assumptions.
+        If the answer is not in the Excel file, respond exactly:"I’m sorry, I don’t know the answer to that."
+        Always respond clearly, concisely, and professionally. Summarize relevant information logically, and 
+        reference Excel fields if needed. Never guess or fabricate answers.Search the knowledge base first, and
+        answer only when confident from the data provided.
 {context}
 
 Question: {question}
